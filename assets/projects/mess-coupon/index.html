@@ -25,7 +25,6 @@
     th, td {
       border: 1px solid #ccc;
       padding: 0.5rem;
-      text-align: left;
       vertical-align: top;
       word-wrap: break-word;
     }
@@ -78,17 +77,18 @@
       box-sizing: border-box;
       flex: 1;
     }
-    .form-row .remove {
-      background-color: #f5c6cb;
-      color: #333;
-    }
     .form-row button {
-      background-color: #d6eaff;
-      color: #333;
       border: none;
+      color: white;
       cursor: pointer;
       border-radius: 4px;
       white-space: nowrap;
+      background-color: #eee;
+      color: #333;
+    }
+    .remove {
+      background-color: #eee;
+      color: #333;
     }
     @media screen and (max-width: 600px) {
       table, thead, tbody, th, td, tr {
@@ -108,14 +108,9 @@
         border: none;
         padding: 0.3rem 0;
       }
-      .cell {
-        gap: 0.5rem;
-      }
       .form-row {
         flex-direction: row;
         gap: 0.3rem;
-        flex-wrap: nowrap;
-        justify-content: space-between;
       }
       .form-row select, .form-row button {
         font-size: 0.7rem;
@@ -139,6 +134,8 @@
 </table>
 
 <script>
+  const API_URL = "https://script.google.com/macros/s/AKfycbwCxNXd5vLgBjV7xsZ0yIBgdLBsAaP0ALSh3JVpnQwHarLGyhwRegYbydT24HRXQx3qIw/exec"; // <-- Replace with your Google Apps Script URL
+
   const messes = [
     { name: "Nilgiri North", offers: { veg: true, nonveg: true } },
     { name: "Nilgiri South", offers: { veg: true, nonveg: true } },
@@ -148,7 +145,31 @@
     { name: "SRR South", offers: { veg: true, nonveg: false } }
   ];
 
-  const data = {}; // Store WhatsApp numbers
+  let globalData = [];
+
+  async function fetchData() {
+    try {
+      const res = await fetch(API_URL);
+      const json = await res.json();
+      globalData = json;
+      renderTable();
+    } catch (e) {
+      alert("Error fetching data.");
+    }
+  }
+
+  async function addEntry(mess, type, number) {
+    try {
+      await fetch(API_URL, {
+        method: "POST",
+        body: JSON.stringify({ mess, type, number }),
+        headers: { "Content-Type": "application/json" }
+      });
+      await fetchData();
+    } catch (e) {
+      alert("Error adding entry.");
+    }
+  }
 
   function renderTable() {
     const body = document.getElementById("tableBody");
@@ -156,28 +177,27 @@
 
     messes.forEach(mess => {
       const tr = document.createElement("tr");
-
       const messTd = document.createElement("td");
       messTd.textContent = mess.name;
       tr.appendChild(messTd);
 
       const td = document.createElement("td");
       td.className = "cell";
-      const key = mess.name;
 
       const contactList = document.createElement("div");
       contactList.className = "contacts";
 
-      (data[key] || []).forEach(entry => {
-        let number = entry.number;
-        const displayNumber = number.replace(/^91/, "");
-        const a = document.createElement("a");
-        a.href = `https://wa.me/${number}`;
-        a.target = "_blank";
-        a.className = entry.type === "veg" ? "veg-link" : "nonveg-link";
-        a.textContent = entry.type === "veg" ? `V: ${displayNumber}` : `NV: ${displayNumber}`;
-        contactList.appendChild(a);
-      });
+      globalData
+        .filter(entry => entry.mess === mess.name)
+        .forEach(entry => {
+          const a = document.createElement("a");
+          const displayNumber = entry.number.replace(/^91/, "");
+          a.href = `https://wa.me/${entry.number}`;
+          a.target = "_blank";
+          a.className = entry.type === "veg" ? "veg-link" : "nonveg-link";
+          a.textContent = entry.type === "veg" ? `V: ${displayNumber}` : `NV: ${displayNumber}`;
+          contactList.appendChild(a);
+        });
       td.appendChild(contactList);
 
       const input = document.createElement("input");
@@ -191,11 +211,11 @@
       const vegOption = document.createElement("option");
       vegOption.value = "veg";
       vegOption.textContent = "Veg";
-      const nonvegOption = document.createElement("option");
-      nonvegOption.value = "nonveg";
-      nonvegOption.textContent = "Non-Veg";
       select.appendChild(vegOption);
       if (mess.offers.nonveg) {
+        const nonvegOption = document.createElement("option");
+        nonvegOption.value = "nonveg";
+        nonvegOption.textContent = "Non-Veg";
         select.appendChild(nonvegOption);
       }
       formRow.appendChild(select);
@@ -209,14 +229,10 @@
           number = "91" + number;
         }
         if (/^91\d{10}$/.test(number)) {
-          if (!data[key]) data[key] = [];
-          if (!data[key].some(e => e.number === number && e.type === type)) {
-            data[key].push({ number, type });
-            input.value = "";
-            renderTable();
-          }
+          addEntry(mess.name, type, number);
+          input.value = "";
         } else {
-          alert("Enter a valid 10-digit WhatsApp number (Indian)");
+          alert("Enter a valid 10-digit WhatsApp number.");
         }
       };
       formRow.appendChild(addBtn);
@@ -225,16 +241,7 @@
       removeBtn.textContent = "Remove";
       removeBtn.className = "remove";
       removeBtn.onclick = () => {
-        let number = input.value.trim();
-        const type = select.value;
-        if (/^\d{10}$/.test(number)) {
-          number = "91" + number;
-        }
-        if (data[key]) {
-          data[key] = data[key].filter(entry => !(entry.number === number && entry.type === type));
-          input.value = "";
-          renderTable();
-        }
+        alert("Removal feature not implemented in this version.");
       };
       formRow.appendChild(removeBtn);
 
@@ -244,7 +251,7 @@
     });
   }
 
-  renderTable();
+  fetchData();
 </script>
 
 </body>
