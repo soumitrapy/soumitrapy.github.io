@@ -3,7 +3,7 @@ title: "Mess Coupon Exchange"
 collection: projects
 permalink: /projects/mess-coupon/
 date: 2025-05-23
-image: assets/images/mess-coupon-thumbnail.png
+image: assets/img/9.jpg
 description: "A responsive web app for mess coupon exchange with WhatsApp integration."
 ---
 
