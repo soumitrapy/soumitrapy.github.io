@@ -1,0 +1,10 @@
+---
+title: "Mess Coupon Exchange"
+collection: projects
+permalink: /projects/mess-coupon/
+date: 2025-05-23
+image: assets/images/mess-coupon-thumbnail.png
+description: "A responsive web app for mess coupon exchange with WhatsApp integration."
+---
+
+<iframe src="/assets/projects/mess-coupon/index.html" width="100%" height="600px" frameborder="0"></iframe>
