@@ -2,257 +2,201 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mess Coupon Exchange</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 1rem;
-      background: #f9f9f9;
-      margin: 0;
+      padding: 1em;
+      background: #f0f0f0;
     }
-    h1 {
-      text-align: center;
-      color: #333;
-      font-size: 1.5rem;
+    h2 {
+      margin-top: 1.5em;
     }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
-      table-layout: fixed;
+    form, .table-container, .remove-section {
+      background: white;
+      padding: 1em;
+      margin-bottom: 1em;
+      border-radius: 8px;
     }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 0.5rem;
-      vertical-align: top;
-      word-wrap: break-word;
-    }
-    th {
-      background-color: #333;
+    .entry {
+      margin: 0.25em 0;
+      padding: 0.5em;
+      border-radius: 5px;
       color: white;
-      font-size: 0.9rem;
+      font-weight: bold;
     }
-    .cell {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
+    .veg {
+      background-color: lightgreen;
+      color: black;
     }
-    .contacts {
+    .nonveg {
+      background-color: darkgreen;
+    }
+    .mess-table {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.3rem;
+      gap: 1em;
     }
-    .contacts a {
-      padding: 6px 10px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 0.8rem;
+    .mess-column {
+      flex: 1 1 300px;
+      background-color: #ffffff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 1em;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .veg-link {
-      background: #d1ffd6;
-      color: #155724;
+    .mess-column h3 {
+      margin-top: 0;
+      text-align: center;
     }
-    .nonveg-link {
-      background: #006400;
-      color: #ffffff;
-    }
-    input {
-      padding: 0.5rem;
-      font-size: 0.9rem;
-      box-sizing: border-box;
+    input, select, button {
       width: 100%;
-      margin-bottom: 0.3rem;
-    }
-    .form-row {
-      display: flex;
-      gap: 0.3rem;
-      flex-wrap: nowrap;
-      justify-content: space-between;
-    }
-    select, .form-row button {
-      padding: 0.4rem;
-      font-size: 0.75rem;
+      padding: 0.5em;
+      margin-top: 0.5em;
+      margin-bottom: 1em;
       box-sizing: border-box;
-      flex: 1;
     }
-    .form-row button {
-      border: none;
-      color: white;
-      cursor: pointer;
-      border-radius: 4px;
-      white-space: nowrap;
-      background-color: #eee;
-      color: #333;
-    }
-    .remove {
-      background-color: #eee;
-      color: #333;
-    }
-    @media screen and (max-width: 600px) {
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
-      tr {
-        margin-bottom: 1rem;
-        border: 1px solid #ccc;
-        padding: 0.5rem;
-        border-radius: 6px;
-        background: white;
-      }
-      th {
-        display: none;
-      }
-      td {
-        border: none;
-        padding: 0.3rem 0;
-      }
-      .form-row {
-        flex-direction: row;
-        gap: 0.3rem;
-      }
-      .form-row select, .form-row button {
-        font-size: 0.7rem;
-        padding: 0.3rem;
-      }
+    .remove-section {
+      background: #ffecec;
     }
   </style>
 </head>
 <body>
+  <h1>Mess Coupon Exchange</h1>
 
-<h1>Mess Coupon Exchange</h1>
+  <div class="table-container">
+    <h2>Available Coupons</h2>
+    <div class="mess-table" id="messTable"></div>
+  </div>
 
-<table id="couponTable">
-  <thead>
-    <tr>
-      <th>Mess</th>
-      <th>Coupons</th>
-    </tr>
-  </thead>
-  <tbody id="tableBody"></tbody>
-</table>
+  <form id="entryForm">
+    <h2>Submit Your Coupon</h2>
+    <label>Mess Name:</label>
+    <select id="messName" required>
+      <option value="Nilgiri North (Firstman)">Nilgiri North (Firstman)</option>
+      <option value="Nilgiri South (Sakthi's Kitchen)">Nilgiri South (Sakthi's Kitchen)</option>
+      <option value="Vindhya North (R GOURAS)">Vindhya North (R GOURAS)</option>
+      <option value="CRCL Vindhya South">CRCL Vindhya South</option>
+      <option value="NeelKesh">NeelKesh (Veg only)</option>
+      <option value="PRISM">PRISM</option>
+      <option value="SRR">SRR</option>
+    </select>
 
-<script>
-  const API_URL = "https://script.google.com/macros/s/AKfycbwCxNXd5vLgBjV7xsZ0yIBgdLBsAaP0ALSh3JVpnQwHarLGyhwRegYbydT24HRXQx3qIw/exec"; // <-- Replace with your Google Apps Script URL
+    <label>Type:</label>
+    <select id="type" required>
+      <option value="V">Veg</option>
+      <option value="NV">Non-Veg</option>
+    </select>
 
-  const messes = [
-    { name: "Nilgiri North", offers: { veg: true, nonveg: true } },
-    { name: "Nilgiri South", offers: { veg: true, nonveg: true } },
-    { name: "Vindya North", offers: { veg: true, nonveg: true } },
-    { name: "Vindya South", offers: { veg: true, nonveg: true } },
-    { name: "Nilkesh North", offers: { veg: true, nonveg: false } },
-    { name: "SRR South", offers: { veg: true, nonveg: false } }
-  ];
+    <label>Time:</label>
+    <select id="time" required>
+      <option value="B">Breakfast</option>
+      <option value="L">Lunch</option>
+      <option value="D">Dinner</option>
+    </select>
 
-  let globalData = [];
+    <label>Date (dd/mm/yyyy):</label>
+    <input type="text" id="date" placeholder="e.g. 01/06/2025" pattern="\d{2}/\d{2}/\d{4}" />
 
-  async function fetchData() {
-    try {
-      const res = await fetch(API_URL);
-      const json = await res.json();
-      globalData = json;
-      renderTable();
-    } catch (e) {
-      alert("Error fetching data.");
-    }
-  }
+    <label>WhatsApp Number:</label>
+    <input type="tel" id="phone" pattern="[0-9]{10}" required placeholder="Enter 10 digit number" />
 
-  async function addEntry(mess, type, number) {
-    try {
-      await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify({ mess, type, number }),
-        headers: { "Content-Type": "application/json" }
-      });
-      await fetchData();
-    } catch (e) {
-      alert("Error adding entry.");
-    }
-  }
+    <button type="submit">Submit</button>
+  </form>
 
-  function renderTable() {
-    const body = document.getElementById("tableBody");
-    body.innerHTML = "";
+  <div class="remove-section">
+    <h2>Remove My Entries</h2>
+    <input type="tel" id="removePhone" pattern="[0-9]{10}" placeholder="Enter your WhatsApp number" />
+    <button onclick="removeEntries()">Remove</button>
+  </div>
 
+  <script>
+    const messes = [
+      "Nilgiri North (Firstman)",
+      "Nilgiri South (Sakthi's Kitchen)",
+      "Vindhya North (R GOURAS)",
+      "CRCL Vindhya South",
+      "NeelKesh",
+      "PRISM",
+      "SRR"
+    ];
+
+    const entries = [];
+
+    const messTable = document.getElementById("messTable");
     messes.forEach(mess => {
-      const tr = document.createElement("tr");
-      const messTd = document.createElement("td");
-      messTd.textContent = mess.name;
-      tr.appendChild(messTd);
-
-      const td = document.createElement("td");
-      td.className = "cell";
-
-      const contactList = document.createElement("div");
-      contactList.className = "contacts";
-
-      globalData
-        .filter(entry => entry.mess === mess.name)
-        .forEach(entry => {
-          const a = document.createElement("a");
-          const displayNumber = entry.number.replace(/^91/, "");
-          a.href = `https://wa.me/${entry.number}`;
-          a.target = "_blank";
-          a.className = entry.type === "veg" ? "veg-link" : "nonveg-link";
-          a.textContent = entry.type === "veg" ? `V: ${displayNumber}` : `NV: ${displayNumber}`;
-          contactList.appendChild(a);
-        });
-      td.appendChild(contactList);
-
-      const input = document.createElement("input");
-      input.placeholder = "WhatsApp number";
-      td.appendChild(input);
-
-      const formRow = document.createElement("div");
-      formRow.className = "form-row";
-
-      const select = document.createElement("select");
-      const vegOption = document.createElement("option");
-      vegOption.value = "veg";
-      vegOption.textContent = "Veg";
-      select.appendChild(vegOption);
-      if (mess.offers.nonveg) {
-        const nonvegOption = document.createElement("option");
-        nonvegOption.value = "nonveg";
-        nonvegOption.textContent = "Non-Veg";
-        select.appendChild(nonvegOption);
-      }
-      formRow.appendChild(select);
-
-      const addBtn = document.createElement("button");
-      addBtn.textContent = "Add";
-      addBtn.onclick = () => {
-        let number = input.value.trim();
-        const type = select.value;
-        if (/^\d{10}$/.test(number)) {
-          number = "91" + number;
-        }
-        if (/^91\d{10}$/.test(number)) {
-          addEntry(mess.name, type, number);
-          input.value = "";
-        } else {
-          alert("Enter a valid 10-digit WhatsApp number.");
-        }
-      };
-      formRow.appendChild(addBtn);
-
-      const removeBtn = document.createElement("button");
-      removeBtn.textContent = "Remove";
-      removeBtn.className = "remove";
-      removeBtn.onclick = () => {
-        alert("Removal feature not implemented in this version.");
-      };
-      formRow.appendChild(removeBtn);
-
-      td.appendChild(formRow);
-      tr.appendChild(td);
-      body.appendChild(tr);
+      const col = document.createElement("div");
+      col.className = "mess-column";
+      col.id = `col-${mess}`;
+      col.innerHTML = `<h3>${mess}</h3><div id="list-${mess}"></div>`;
+      messTable.appendChild(col);
     });
-  }
 
-  fetchData();
-</script>
+    document.getElementById("entryForm").addEventListener("submit", e => {
+      e.preventDefault();
 
+      const messName = document.getElementById("messName").value;
+      const type = document.getElementById("type").value;
+      const time = document.getElementById("time").value;
+      const dateInput = document.getElementById("date").value;
+      const phone = document.getElementById("phone").value;
+
+      if (messName === "NeelKesh" && type === "NV") {
+        alert("NeelKesh only offers Veg coupons.");
+        return;
+      }
+
+      let dateStr;
+      if (dateInput) {
+        const match = dateInput.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+        if (!match) {
+          alert("Invalid date format. Please use dd/mm/yyyy.");
+          return;
+        }
+        dateStr = `${match[1]}/${match[2]}`;
+      } else {
+        const date = new Date();
+        dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth()+1).toString().padStart(2, '0')}`;
+      }
+
+      const entry = {
+        mess: messName,
+        type,
+        time,
+        date: dateStr,
+        phone
+      };
+
+      entries.push(entry);
+      renderEntries();
+      e.target.reset();
+    });
+
+    function renderEntries() {
+      messes.forEach(mess => {
+        const list = document.getElementById(`list-${mess}`);
+        list.innerHTML = "";
+        entries.filter(e => e.mess === mess).forEach(entry => {
+          const div = document.createElement("div");
+          div.className = `entry ${entry.type === "V" ? "veg" : "nonveg"}`;
+          div.innerHTML = `${entry.type} | ${entry.time} | ${entry.date} - <a style='color: inherit' href='https://wa.me/91${entry.phone}' target='_blank'>${entry.phone}</a>`;
+          list.appendChild(div);
+        });
+      });
+    }
+
+    function removeEntries() {
+      const phone = document.getElementById("removePhone").value;
+      if (!phone) return;
+      const idx = entries.filter(e => e.phone === phone);
+      if (idx.length === 0) return alert("No entries found for this number.");
+      for (let i = entries.length - 1; i >= 0; i--) {
+        if (entries[i].phone === phone) entries.splice(i, 1);
+      }
+      renderEntries();
+      alert("Entries removed.");
+    }
+  </script>
 </body>
 </html>
