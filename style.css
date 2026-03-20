@@ -49,10 +49,16 @@ nav ul li a:hover {
   margin-bottom: 0.5em;
   letter-spacing: 0.08em;
   background: linear-gradient(90deg, #00eaff 0%, #ff00cc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  /* Firefox fallback */
+  /* Use mask-image for Firefox */
+  mask-image: linear-gradient(90deg, #00eaff 0%, #ff00cc 100%);
+  mask-size: 100%;
+  mask-repeat: no-repeat;
+}
 }
 .intro p {
   font-size: 1.4em;
