@@ -1,3 +1,50 @@
+/* For non-home pages, ensure solid black background */
+.page-bg {
+  background: #000 !important;
+  min-height: 100vh;
+  width: 100vw;
+}
+.video-bg-container {
+  position: relative;
+  width: 100vw;
+  min-height: 60vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 1;
+  pointer-events: none;
+  background: #000;
+}
+.intro-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  padding: 0;
+  background: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+}
 body {
   margin: 0;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
@@ -12,6 +59,8 @@ nav {
   padding: 1.5em 0;
   box-shadow: 0 2px 24px #00eaff33;
   backdrop-filter: blur(8px);
+  position: relative;
+  z-index: 10;
 }
 nav ul {
   display: flex;
@@ -41,8 +90,17 @@ nav ul li a:hover {
 
 .intro {
   text-align: center;
-  margin-top: 6em;
-  margin-bottom: 4em;
+  margin: 0;
+  padding: 0;
+  background: none !important;
+  backdrop-filter: none !important;
+  position: relative;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 }
 .intro h1 {
   font-size: 3.5em;
@@ -59,22 +117,13 @@ nav ul li a:hover {
   mask-size: 100%;
   mask-repeat: no-repeat;
 }
-}
 .intro p {
   font-size: 1.4em;
   margin-bottom: 2.5em;
   color: #e0e0e0;
 }
 .visual-effect {
-  width: 220px;
-  height: 220px;
-  margin: 0 auto;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #00eaff 0%, #ff00cc 100%);
-  box-shadow: 0 0 60px 20px #00eaff44, 0 0 120px 40px #ff00cc33;
-  animation: neonPulse 2.5s infinite;
-  position: relative;
-  z-index: 1;
+  display: none;
 }
 @keyframes neonPulse {
   0% { box-shadow: 0 0 60px 20px #00eaff44, 0 0 120px 40px #ff00cc33; }
