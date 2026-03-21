@@ -1,260 +1,160 @@
-/* For non-home pages, ensure solid black background */
-.page-bg {
-  background: #000 !important;
-  min-height: 100vh;
-  width: 100vw;
+:root {
+  --bg: #000;
+  --text: #ffffff;
+  --nav-bg: rgba(0, 0, 0, 0.65);
 }
-.video-bg-container {
-  position: relative;
-  width: 100vw;
-  min-height: 60vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+* {
+  box-sizing: border-box;
 }
-.bg-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  min-width: 100vw;
-  min-height: 100vh;
-  object-fit: cover;
-  z-index: 0;
-  opacity: 1;
-  pointer-events: none;
-  background: #000;
-}
-.intro-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  padding: 0;
-  background: none !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-}
-}
+
+html,
 body {
   margin: 0;
-  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-  background: #000;
-  color: #fff;
-  min-height: 100vh;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Montserrat, "Segoe UI", Arial, sans-serif;
   overflow-x: hidden;
 }
 
 nav {
-  background: rgba(20, 20, 20, 0.85);
-  padding: 1.5em 0;
-  box-shadow: 0 2px 24px #00eaff33;
-  backdrop-filter: blur(8px);
-  position: relative;
-  z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 0.9rem 0;
 }
+
 nav ul {
-  display: flex;
-  justify-content: center;
-  list-style: none;
   margin: 0;
   padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 1.4rem;
 }
-nav ul li {
-  margin: 0 2em;
-}
-nav ul li a {
+
+nav a {
   color: #fff;
   text-decoration: none;
-  font-weight: bold;
-  font-size: 1.2em;
-  letter-spacing: 0.05em;
-  padding: 0.5em 1em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.45rem 0.8rem;
   border-radius: 8px;
-  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
-}
-nav ul li a:hover {
-  background: linear-gradient(90deg, #00eaff 0%, #ff00cc 100%);
-  color: #000;
-  box-shadow: 0 0 16px #00eaff88;
 }
 
+nav a:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Home hero with fullscreen video */
 .intro {
-  text-align: center;
-  margin: 0;
-  padding: 0;
-  background: none !important;
-  backdrop-filter: none !important;
   position: relative;
-  min-height: 60vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding-top: 56px; /* keep text clear of fixed nav */
+  z-index: 1;
 }
+
+.bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 1;
 }
+
+.intro-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  padding: 0 1rem;
+  background: transparent;
+}
+
 .intro h1 {
-  font-size: 3.5em;
-  margin-bottom: 0.5em;
-  letter-spacing: 0.08em;
-  background: linear-gradient(90deg, #00eaff 0%, #ff00cc 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  /* Firefox fallback */
-  /* Use mask-image for Firefox */
-  mask-image: linear-gradient(90deg, #00eaff 0%, #ff00cc 100%);
-  mask-size: 100%;
-  mask-repeat: no-repeat;
-}
-.intro p {
-  font-size: 1.4em;
-  margin-bottom: 2.5em;
-  color: #e0e0e0;
-}
-.visual-effect {
-  display: none;
-}
-@keyframes neonPulse {
-  0% { box-shadow: 0 0 60px 20px #00eaff44, 0 0 120px 40px #ff00cc33; }
-  50% { box-shadow: 0 0 90px 30px #ff00cc66, 0 0 180px 60px #00eaff66; }
-  100% { box-shadow: 0 0 60px 20px #00eaff44, 0 0 120px 40px #ff00cc33; }
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 4.2rem);
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
 }
 
-.projects, .blog, .contact {
-  max-width: 700px;
-  margin: 4em auto;
-  background: rgba(20, 20, 20, 0.85);
-  padding: 2.5em;
-  border-radius: 24px;
-  box-shadow: 0 8px 32px #00eaff22, 0 2px 24px #ff00cc22;
-  backdrop-filter: blur(8px);
-  border: 1px solid #222;
-}
-.projects h1, .blog h1, .contact h1 {
-  color: #00eaff;
-  font-size: 2.2em;
-  margin-bottom: 1em;
-  letter-spacing: 0.06em;
-}
-.projects p, .blog p, .contact p {
-  font-size: 1.15em;
-  color: #e0e0e0;
+/* About me appears below home on scroll */
+.about-me-section {
+  min-height: 100vh;
+  width: 100%;
+  background: #000;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 3;
+  padding: 96px 1rem 48px;
 }
 
-/* Add some glassmorphism and neon glow */
-.projects, .blog, .contact {
-  border: 1.5px solid #00eaff33;
-  box-shadow: 0 0 24px #00eaff33, 0 0 48px #ff00cc33;
+.about-me-content {
+  max-width: 760px;
+  text-align: center;
 }
 
-/* Responsive design */
-@media (max-width: 800px) {
-  .intro h1 {
-    font-size: 2.2em;
-  }
-  .visual-effect {
-    width: 140px;
-    height: 140px;
-  }
-  .projects, .blog, .contact {
-    padding: 1.2em;
-    border-radius: 12px;
-  }
+.about-me-content h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
 }
-    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
-  }
-  nav ul li a:hover {
-    background: linear-gradient(90deg, #00eaff 0%, #ff00cc 100%);
-    color: #000;
-    box-shadow: 0 0 16px #00eaff88;
-  }
 
-  .intro {
-    text-align: center;
-    margin-top: 6em;
-    margin-bottom: 4em;
-  }
-  .intro h1 {
-    font-size: 3.5em;
-    margin-bottom: 0.5em;
-    letter-spacing: 0.08em;
-    background: linear-gradient(90deg, #00eaff 0%, #ff00cc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-  }
-  .intro p {
-    font-size: 1.4em;
-    margin-bottom: 2.5em;
-    color: #e0e0e0;
-  }
-  .visual-effect {
-    width: 220px;
-    height: 220px;
-    margin: 0 auto;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #00eaff 0%, #ff00cc 100%);
-    box-shadow: 0 0 60px 20px #00eaff44, 0 0 120px 40px #ff00cc33;
-    animation: neonPulse 2.5s infinite;
-    position: relative;
-    z-index: 1;
-  }
-  @keyframes neonPulse {
-    0% { box-shadow: 0 0 60px 20px #00eaff44, 0 0 120px 40px #ff00cc33; }
-    50% { box-shadow: 0 0 90px 30px #ff00cc66, 0 0 180px 60px #00eaff66; }
-    100% { box-shadow: 0 0 60px 20px #00eaff44, 0 0 120px 40px #ff00cc33; }
-  }
+.about-me-content p {
+  margin: 0;
+  line-height: 1.6;
+  color: #d6d6d6;
+}
 
-  .projects, .blog, .contact {
-    max-width: 700px;
-    margin: 4em auto;
-    background: rgba(20, 20, 20, 0.85);
-    padding: 2.5em;
-    border-radius: 24px;
-    box-shadow: 0 8px 32px #00eaff22, 0 2px 24px #ff00cc22;
-    backdrop-filter: blur(8px);
-    border: 1px solid #222;
-  }
-  .projects h1, .blog h1, .contact h1 {
-    color: #00eaff;
-    font-size: 2.2em;
-    margin-bottom: 1em;
-    letter-spacing: 0.06em;
-  }
-  .projects p, .blog p, .contact p {
-    font-size: 1.15em;
-    color: #e0e0e0;
-  }
+.contact-info {
+  background: #000;
+  text-align: center;
+  padding: 2rem 1rem 3rem;
+  position: relative;
+  z-index: 3;
+}
 
-  /* Add some glassmorphism and neon glow */
-  .projects, .blog, .contact {
-    border: 1.5px solid #00eaff33;
-    box-shadow: 0 0 24px #00eaff33, 0 0 48px #ff00cc33;
-  }
+.contact-info h2 {
+  margin: 0 0 1rem;
+}
 
-  /* Responsive design */
-  @media (max-width: 800px) {
-    .intro h1 {
-      font-size: 2.2em;
-    }
-    .visual-effect {
-      width: 140px;
-      height: 140px;
-    }
-    .projects, .blog, .contact {
-      padding: 1.2em;
-      border-radius: 12px;
-    }
-  }
+.contact-info p {
+  margin: 0.35rem 0;
+}
+
+.contact-info a {
+  color: #8fd3ff;
+}
+
+/* Personal page */
+.page-bg {
+  min-height: 100vh;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding-top: 72px;
+}
+
+.personal {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.personal h2 {
+  margin-top: 0;
+}
